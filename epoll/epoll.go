@@ -92,17 +92,19 @@ func socketFD(conn net.Conn) int {
 	}
 }
 func tcpConnFD(conn net.Conn) int {
-	//edit Conn.go in tls package
-	//add this function
-	//func (c *Conn) UnderlyingConn() net.Conn {
-	//	return c.conn
-	//}
 	netFD := reflect.Indirect(reflect.Indirect(reflect.ValueOf(conn)).FieldByName("fd"))
 	pfd := reflect.Indirect(netFD.FieldByName("pfd"))
 	fd := int(pfd.FieldByName("Sysfd").Int())
 	return fd
 }
 func tlsConnFD(conn net.Conn) int {
+	//edit Conn.go in tls package
+	//add this function
+	//func (c *Conn) UnderlyingConn() net.Conn {
+	//	return c.conn
+	//}
+	//maybe cause some problem
+	//ask for help
 	tlsConn,ok := conn.(*tls.Conn)
 	if ok {
 		tcpConn := tlsConn.UnderlyingConn()
